@@ -1,0 +1,4 @@
+[submodule "runstats"]
+	path = runstats
+	url = https://github.com/cimeister/runstats.git
+	branch = master
