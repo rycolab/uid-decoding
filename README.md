@@ -20,7 +20,7 @@ subword-nmt==0.3.7
 
 To compile the datastructure classes, run:
 ```
-pip setup install -e .
+pip install -e .
 ```
 
 To compile the statistics classes, navigate to the `runstats` submodule:
