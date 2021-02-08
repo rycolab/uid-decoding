@@ -147,7 +147,7 @@ def get_parser():
                         "score. DO NOT USE early stopping in combination with "
                         "the dfs or restarting decoder when your predictors "
                         "can produce positive scores!")
-    group.add_argument("--gumbel", action='store_true',
+    group.add_argument("--gumbel", action='store_true', default=False,
                         help="Add gumbel random variable as in Kool et. al 2019. "
                         "effectively makex beam search random sampling")
     group.add_argument('--temperature', default=1., type=float, metavar='N',

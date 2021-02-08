@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import copy
+import sys
 import utils
 import logging
 import numpy as np
@@ -40,7 +41,7 @@ class PartialHypothesis(object):
         self.score, self.base_score = 0.0, 0.0
         self.score_breakdown = []
         self.word_to_consume = None
-        self.statistics = Statistics() if use_stats else None
+        self.statistics = Statistics() and self.statistics.push(0,0) if use_stats else None
 
     def __repr__(self):
         """Returns a string representation of this hypothesis."""
@@ -104,8 +105,6 @@ class PartialHypothesis(object):
     def get_score_variance(self, val=None):
         if val is not None:
             return self.statistics.pos_variance(val,ddof=0) 
-        if len(self) < 2:
-            return 1.
         return self.statistics.variance(ddof=0)
 
     def get_score_max(self, val=None):
@@ -116,8 +115,6 @@ class PartialHypothesis(object):
     def get_local_variance(self, val=None):
         if val is not None:
             return self.statistics.pos_local_variance(val,ddof=0) 
-        if len(self) < 2:
-            return 1.
         return self.statistics.local_variance(ddof=0) 
         
     def get_score_greedy(self, val=None):
@@ -168,6 +165,10 @@ class Decoder(object):
          # score function will be monotonic without modifications to scoring function
         self.not_monotonic = any([self.variance_reg,self.local_variance_reg, self.max_reg, 
                                 self.greedy_reg, self.square_reg, self.length_norm]) 
+        if any([self.variance_reg,self.local_variance_reg, self.max_reg,
+            self.greedy_reg, self.square_reg]) and not self.calculate_stats:
+            logging.fatal("Must use statistics with regularizers. Cannot use with Gumbel stochastic decoding")
+            sys.exit(1)
         # if self.not_monotonic and decoder_args.early_stopping:
         #     logging.warn("Using early stopping with non-monotonic scoring function. Behavior "
         #         "may not be defined!")
