@@ -59,7 +59,7 @@ Alternatively, one can play around with the toy model in the test scripts. Outpu
 
 ### Beam Search
 
-Basic beam search can be performed on a fairseq model translating from German to English on the IWSLT dataset as follows:
+Basic beam search can be performed on a fairseq model translating from English to French on the WMT'14 dataset as follows:
 
 ```
  python decode.py  --fairseq_path wmt14.en-fr.fconv-py/model.pt --fairseq_lang_pair en-fr --src_wmap wmap.en --trg_wmap wmap.fr --input_file newstest_bpe.txt --preprocessing word --postprocessing bpe@@ --decoder beam --beam 10 
